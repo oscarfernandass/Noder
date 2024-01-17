@@ -21,8 +21,9 @@ mongoose.connect(mongoUrl, {
 require("./userDetails");
 
 const User = mongoose.model("UserInfo");
+const ProfileCard = mongoose.model("ProfileCardInfo"); // Assuming you have a model for ProfileCardInfo
 
-// Only keep the GET method
+// GET method for fetching user data
 app.get("/get", async (req, res) => {
   try {
     const allUsers = await User.find();
@@ -30,6 +31,20 @@ app.get("/get", async (req, res) => {
       res.send({ status: "ok", users: allUsers });
     } else {
       res.send({ status: "not found", message: "No users found" });
+    }
+  } catch (error) {
+    res.status(500).send({ status: "error", message: "Internal Server Error" });
+  }
+});
+
+// GET method for fetching profile card data
+app.get("/getProfileCard", async (req, res) => {
+  try {
+    const allProfileCards = await ProfileCard.find();
+    if (allProfileCards.length > 0) {
+      res.send({ status: "ok", profileCards: allProfileCards });
+    } else {
+      res.send({ status: "not found", message: "No profile cards found" });
     }
   } catch (error) {
     res.status(500).send({ status: "error", message: "Internal Server Error" });
